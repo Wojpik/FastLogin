@@ -81,8 +81,17 @@ public abstract class JoinManagement<P extends C, C, S extends LoginSource> {
         profile.setLastIp(ip);
         if (profile.isExistingPlayer()) {
             if (profile.isOnlinemodePreferred()) {
-                core.getPlugin().getLog().info("Requesting premium login for registered player: {}", username);
-                requestPremiumLogin(source, profile, username, true);
+                if (core.hasFailedLogin(ip, username)) {
+                    core.getPlugin().getLog().info("Second attempt login -> cracked {}", username);
+
+                    // poprzednia proba premium nie powiodla sie - pozwol wejsc jako cracked
+                    if (isValidUsername(source, profile)) {
+                        startCrackedSession(source, profile, username);
+                    }
+                } else {
+                    core.getPlugin().getLog().info("Requesting premium login for registered player: {}", username);
+                    requestPremiumLogin(source, profile, username, true);
+                }
             } else {
                 if (isValidUsername(source, profile)) {
                     startCrackedSession(source, profile, username);
