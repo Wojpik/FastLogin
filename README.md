@@ -7,7 +7,7 @@ So they don't need to enter passwords. This is also called auto login (auto-logi
 
 ## Features
 
-* Detect paid accounts from others
+* Detect paid accounts from others gut
 * Automatically login paid accounts (premium)
 * Support various of auth plugins
 * Premium UUID support
