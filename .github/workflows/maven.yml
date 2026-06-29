@@ -46,19 +46,19 @@ jobs:
         uses: actions/upload-artifact@v4
         with:
           name: FastLogin-Bukkit
-          path: bukkit/target/fastlogin.bukkit-*.jar
+          path: bukkit/target/FastLoginBukkit.jar
 
       - name: Upload Bungee jar
         uses: actions/upload-artifact@v4
         with:
           name: FastLogin-Bungee
-          path: bungee/target/fastlogin.bungee-*.jar
+          path: bungee/target/FastLoginBungee.jar
 
       - name: Upload Velocity jar
         uses: actions/upload-artifact@v4
         with:
           name: FastLogin-Velocity
-          path: velocity/target/fastlogin.velocity-*.jar
+          path: velocity/target/FastLoginVelocity.jar
 
   dependency:
     runs-on: ubuntu-latest
