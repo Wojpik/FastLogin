@@ -284,6 +284,11 @@ public class FastLoginCore<P extends C, C, T extends PlatformPlugin<C>> {
         pendingLogin.put(ip + username, new Object());
     }
 
+    
+    public void clearLoginAttempt(String ip, String username) {
+        pendingLogin.remove(ip + username);
+    }
+
     public boolean hasFailedLogin(String ip, String username) {
         if (!config.get("secondAttemptCracked", false)) {
             return false;
