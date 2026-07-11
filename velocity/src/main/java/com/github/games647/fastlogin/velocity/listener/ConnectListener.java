@@ -130,6 +130,9 @@ public class ConnectListener {
             session.setUuid(verifiedUUID);
             session.setVerifiedUsername(verifiedUsername);
 
+            String ip = event.getConnection().getRemoteAddress().getAddress().getHostAddress();
+            plugin.getCore().clearLoginAttempt(ip, verifiedUsername);
+
             StoredProfile playerProfile = session.getProfile();
             playerProfile.setId(verifiedUUID);
             if (!plugin.getCore().getConfig().get("premiumUuid", true)) {
