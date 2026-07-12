@@ -90,9 +90,14 @@ public abstract class ForceLoginManagement<P extends C, C, L extends LoginSessio
                 }
             } else if (playerProfile != null) {
                 //cracked player
-                playerProfile.setId(null);
-                playerProfile.setOnlinemodePreferred(false);
-                storage.save(playerProfile);
+                if (session.isPreserveOnlineModePreference()) {
+                    core.getPlugin().getLog().info(
+                            "Cracked recovery session for {} - preserving online mode preference", getName(player));
+                } else {
+                    playerProfile.setId(null);
+                    playerProfile.setOnlinemodePreferred(false);
+                    storage.save(playerProfile);
+                }
             }
         } catch (Exception ex) {
             core.getPlugin().getLog().warn("ERROR ON FORCE LOGIN of {}", getName(player), ex);
