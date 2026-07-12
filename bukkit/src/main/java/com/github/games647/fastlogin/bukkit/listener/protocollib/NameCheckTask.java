@@ -111,8 +111,10 @@ public class NameCheckTask extends JoinManagement<Player, CommandSender, Protoco
     }
 
     @Override
-    public void startCrackedSession(ProtocolLibLoginSource source, StoredProfile profile, String username) {
+    public void startCrackedSession(ProtocolLibLoginSource source, StoredProfile profile, String username,
+                                     boolean preserveOnlineModePreference) {
         BukkitLoginSession loginSession = new BukkitLoginSession(username, profile);
+        loginSession.setPreserveOnlineModePreference(preserveOnlineModePreference);
         plugin.putSession(player.getAddress(), loginSession);
     }
 }
