@@ -132,8 +132,10 @@ public class ProtocolSupportListener extends JoinManagement<Player, CommandSende
     }
 
     @Override
-    public void startCrackedSession(ProtocolLoginSource source, StoredProfile profile, String username) {
+    public void startCrackedSession(ProtocolLoginSource source, StoredProfile profile, String username,
+                                     boolean preserveOnlineModePreference) {
         BukkitLoginSession loginSession = new BukkitLoginSession(username, profile);
+        loginSession.setPreserveOnlineModePreference(preserveOnlineModePreference);
         plugin.putSession(source.getAddress(), loginSession);
     }
 }
