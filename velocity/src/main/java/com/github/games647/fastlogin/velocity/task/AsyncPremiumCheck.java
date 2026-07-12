@@ -90,8 +90,10 @@ public class AsyncPremiumCheck extends JoinManagement<Player, CommandSource, Vel
     }
 
     @Override
-    public void startCrackedSession(VelocityLoginSource source, StoredProfile profile, String username) {
+    public void startCrackedSession(VelocityLoginSource source, StoredProfile profile, String username,
+                                     boolean preserveOnlineModePreference) {
         VelocityLoginSession session = new VelocityLoginSession(username, false, profile);
+        session.setPreserveOnlineModePreference(preserveOnlineModePreference);
         plugin.getSession().put(source.getConnection().getRemoteAddress(), session);
     }
 }
