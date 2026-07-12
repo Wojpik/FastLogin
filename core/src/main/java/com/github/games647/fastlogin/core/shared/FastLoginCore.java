@@ -78,7 +78,8 @@ public class FastLoginCore<P extends C, C, T extends PlatformPlugin<C>> {
     private static final long MAX_EXPIRE_RATE = 1_000_000;
 
     private final Map<String, String> localeMessages = new ConcurrentHashMap<>();
-    private final ConcurrentMap<String, Object> pendingLogin = CommonUtil.buildCache(
+
+    private ConcurrentMap<String, Object> pendingLogin = CommonUtil.buildCache(
             Duration.ofMinutes(5), -1
     );
 
@@ -119,6 +120,13 @@ public class FastLoginCore<P extends C, C, T extends PlatformPlugin<C>> {
             plugin.getLog().error("Failed to load yaml files", ioEx);
             return;
         }
+
+        int cacheMinutes = config.getInt("secondAttemptCracked-cache-minutes", 5);
+        if (cacheMinutes <= 0) {
+            plugin.getLog().warn("secondAttemptCracked-cache-minutes musi byc > 0, uzywam domyslnej wartosci 5");
+            cacheMinutes = 5;
+        }
+        pendingLogin = CommonUtil.buildCache(Duration.ofMinutes(cacheMinutes), -1);
 
         Options resolverOptions = new Options();
         resolverOptions.setMaxNameRequests(config.getInt("mojang-request-limit", 600));
@@ -284,7 +292,6 @@ public class FastLoginCore<P extends C, C, T extends PlatformPlugin<C>> {
         pendingLogin.put(ip + username, new Object());
     }
 
-    
     public void clearLoginAttempt(String ip, String username) {
         pendingLogin.remove(ip + username);
     }
