@@ -84,9 +84,8 @@ public abstract class JoinManagement<P extends C, C, S extends LoginSource> {
                 if (core.hasFailedLogin(ip, username)) {
                     core.getPlugin().getLog().info("Second attempt login -> cracked {}", username);
 
-                    // poprzednia proba premium nie powiodla sie - pozwol wejsc jako cracked
                     if (isValidUsername(source, profile)) {
-                        startCrackedSession(source, profile, username);
+                        startCrackedSession(source, profile, username, true);
                     }
                 } else {
                     core.getPlugin().getLog().info("Requesting premium login for registered player: {}", username);
@@ -94,7 +93,7 @@ public abstract class JoinManagement<P extends C, C, S extends LoginSource> {
                 }
             } else {
                 if (isValidUsername(source, profile)) {
-                    startCrackedSession(source, profile, username);
+                    startCrackedSession(source, profile, username, false);
                 }
             }
         } else {
@@ -108,7 +107,7 @@ public abstract class JoinManagement<P extends C, C, S extends LoginSource> {
                 core.getPlugin().getLog().info("Second attempt login -> cracked {}", username);
 
                 //first login request failed so make a cracked session
-                startCrackedSession(source, profile, username);
+                startCrackedSession(source, profile, username, false);
                 return;
             }
 
@@ -127,7 +126,7 @@ public abstract class JoinManagement<P extends C, C, S extends LoginSource> {
                     return;
                 }
 
-                startCrackedSession(source, profile, username);
+                startCrackedSession(source, profile, username, false);
             }
         } catch (RateLimitException rateLimitEx) {
             core.getPlugin().getLog().error("Mojang's rate limit reached for {}. The public IPv4 address of this"
@@ -187,5 +186,6 @@ public abstract class JoinManagement<P extends C, C, S extends LoginSource> {
 
     public abstract void requestPremiumLogin(S source, StoredProfile profile, String username, boolean registered);
 
-    public abstract void startCrackedSession(S source, StoredProfile profile, String username);
+    public abstract void startCrackedSession(S source, StoredProfile profile, String username,
+                                              boolean preserveOnlineModePreference);
 }
