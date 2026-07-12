@@ -40,6 +40,8 @@ public abstract class LoginSession {
 
     protected boolean registered;
 
+    private boolean preserveOnlineModePreference;
+
     public LoginSession(String requestUsername, boolean registered, StoredProfile profile) {
         this.requestUsername = requestUsername;
         this.username = requestUsername;
@@ -88,6 +90,14 @@ public abstract class LoginSession {
      */
     public synchronized void setUuid(UUID uuid) {
         this.uuid = uuid;
+    }
+
+    public synchronized boolean isPreserveOnlineModePreference() {
+        return preserveOnlineModePreference;
+    }
+
+    public synchronized void setPreserveOnlineModePreference(boolean preserveOnlineModePreference) {
+        this.preserveOnlineModePreference = preserveOnlineModePreference;
     }
 
     @Override
