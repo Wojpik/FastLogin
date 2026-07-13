@@ -26,6 +26,7 @@
 package com.github.games647.fastlogin.bukkit.task;
 
 import com.github.games647.fastlogin.bukkit.FastLoginBukkit;
+import com.github.games647.fastlogin.bukkit.hook.AuthCoreHook;
 import com.github.games647.fastlogin.bukkit.hook.AuthMeHook;
 import com.github.games647.fastlogin.bukkit.hook.CrazyLoginHook;
 import com.github.games647.fastlogin.bukkit.hook.LogItHook;
@@ -93,7 +94,7 @@ public class DelayedAuthHook implements Runnable {
 
     private AuthPlugin<Player> getAuthHook() {
         try {
-            List<Class<? extends AuthPlugin<Player>>> hooks = Arrays.asList(AuthMeHook.class,
+            List<Class<? extends AuthPlugin<Player>>> hooks = Arrays.asList(AuthCoreHook.class, AuthMeHook.class,
                     CrazyLoginHook.class, LogItHook.class, LoginSecurityHook.class, UltraAuthHook.class,
                     XAuthHook.class, PasskyHook.class);
 
