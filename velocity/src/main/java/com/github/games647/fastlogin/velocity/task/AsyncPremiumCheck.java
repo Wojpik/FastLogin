@@ -34,9 +34,12 @@ import com.github.games647.fastlogin.velocity.VelocityLoginSource;
 import com.github.games647.fastlogin.velocity.event.VelocityFastLoginPreLoginEvent;
 import com.velocitypowered.api.command.CommandSource;
 import com.velocitypowered.api.event.connection.PreLoginEvent;
+import com.velocitypowered.api.plugin.PluginContainer;
 import com.velocitypowered.api.proxy.InboundConnection;
 import com.velocitypowered.api.proxy.Player;
 
+import java.lang.reflect.Method;
+import java.util.Optional;
 import java.util.concurrent.ExecutionException;
 
 public class AsyncPremiumCheck extends JoinManagement<Player, CommandSource, VelocityLoginSource>
@@ -92,8 +95,33 @@ public class AsyncPremiumCheck extends JoinManagement<Player, CommandSource, Vel
     @Override
     public void startCrackedSession(VelocityLoginSource source, StoredProfile profile, String username,
                                      boolean preserveOnlineModePreference) {
+        if (isPremiumWithoutPassword(username)) {
+            source.kick("&cTen nick nalezy do konta Premium, ktore nie ustawilo hasla "
+                    + "zapasowego. Polacz sie przez swoje konto Microsoft/Mojang.");
+            return;
+        }
+
         VelocityLoginSession session = new VelocityLoginSession(username, false, profile);
         session.setPreserveOnlineModePreference(preserveOnlineModePreference);
         plugin.getSession().put(source.getConnection().getRemoteAddress(), session);
+    }
+
+    private boolean isPremiumWithoutPassword(String username) {
+        try {
+            Optional<PluginContainer> container = plugin.getProxy().getPluginManager().getPlugin("authvelocity");
+            if (container.isEmpty()) {
+                return false;
+            }
+            Optional<?> instance = container.get().getInstance();
+            if (instance.isEmpty()) {
+                return false;
+            }
+            Object authVelocity = instance.get();
+            Method method = authVelocity.getClass().getMethod("isPremiumWithoutPassword", String.class);
+            return (boolean) method.invoke(authVelocity, username);
+        } catch (Exception e) {
+            plugin.getLog().warn("Nie udalo sie sprawdzic cache'a AuthVelocity (premium/haslo)", e);
+            return false;
+        }
     }
 }
